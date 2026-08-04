@@ -1,0 +1,25 @@
+{
+  "name": "Ryna — Backend Developer",
+  "short_name": "Ryna",
+  "description": "Portfolio Ryna — Backend Developer dari Karawang.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b0906",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn.zass.in/MoqV0lNVa3.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn.zass.in/MoqV0lNVa3.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

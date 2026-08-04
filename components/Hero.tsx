@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion as m } from 'framer-motion';
 import { MapPin, GraduationCap, ChevronDown } from 'lucide-react';
 import ImageWithSkeleton from './ImageWithSkeleton';
+import { useTypewriter } from '../hooks/useTypewriter';
+import { HERO_QUOTE, TYPING_ROLES } from '../constants';
 
 const motion = m as any;
 
@@ -47,6 +49,7 @@ const useScrambleText = (target: string, trigger: boolean, duration = 900) => {
 const Hero: React.FC = () => {
   const [startScramble, setStartScramble] = useState(false);
   const scrambledName = useScrambleText(TARGET_NAME, startScramble);
+  const typedRole = useTypewriter(TYPING_ROLES);
 
   useEffect(() => {
     const timer = setTimeout(() => setStartScramble(true), 300);
@@ -90,9 +93,20 @@ const Hero: React.FC = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 1 }}
-              className="text-lg md:text-2xl text-zinc-400 font-medium max-w-2xl mx-auto"
+              className="text-lg md:text-2xl text-zinc-400 font-medium max-w-2xl mx-auto min-h-[1.5em]"
             >
-              Backend Developer
+              {typedRole}
+              <span className="animate-pulse">|</span>
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.55, duration: 1 }}
+              className="text-xs md:text-sm text-zinc-300 dark:text-zinc-600 font-medium italic max-w-md mx-auto"
+            >
+              "{HERO_QUOTE}"
             </motion.p>
 
             <motion.div

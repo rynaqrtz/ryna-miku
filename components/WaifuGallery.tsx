@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { motion as m, AnimatePresence } from 'framer-motion';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { motion as m, AnimatePresence, PanInfo } from 'framer-motion';
 import { X, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WAIFU_GALLERY } from '../constants';
 import ImageWithSkeleton from './ImageWithSkeleton';
 
 const motion = m as any;
 
-const gridLayout = [
+const PATTERN = [
   'col-span-6 md:col-span-6 aspect-[9/16]',
   'col-span-6 md:col-span-6 aspect-[9/16]',
   'col-span-12 md:col-span-12 aspect-[16/9]',
@@ -15,8 +15,15 @@ const gridLayout = [
   'col-span-6 md:col-span-4 aspect-square',
 ];
 
+const SWIPE_THRESHOLD = 60;
+
 const WaifuGallery: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const gridLayout = useMemo(
+    () => WAIFU_GALLERY.map((_, idx) => PATTERN[idx % PATTERN.length]),
+    []
+  );
 
   const closeLightbox = useCallback(() => setSelectedIndex(null), []);
 
@@ -33,6 +40,17 @@ const WaifuGallery: React.FC = () => {
       return (prev + 1) % WAIFU_GALLERY.length;
     });
   }, []);
+
+  const handleDragEnd = useCallback(
+    (_: unknown, info: PanInfo) => {
+      if (info.offset.x > SWIPE_THRESHOLD) {
+        showPrev();
+      } else if (info.offset.x < -SWIPE_THRESHOLD) {
+        showNext();
+      }
+    },
+    [showPrev, showNext]
+  );
 
   useEffect(() => {
     if (selectedIndex === null) return;
@@ -62,8 +80,8 @@ const WaifuGallery: React.FC = () => {
             </span>
           </motion.div>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="text-6xl md:text-9xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter mb-6 leading-[0.85]"
@@ -107,12 +125,17 @@ const WaifuGallery: React.FC = () => {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative max-w-6xl w-full h-auto max-h-[90vh] bg-white dark:bg-zinc-900 rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-2xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-center"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.5}
+              onDragEnd={handleDragEnd}
+              className="relative max-w-6xl w-full h-auto max-h-[90vh] bg-white dark:bg-zinc-900 rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-2xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-center touch-pan-y"
             >
               <img
                 src={WAIFU_GALLERY[selectedIndex].url}
-                className="w-full h-full object-contain p-4 md:p-12"
+                className="w-full h-full object-contain p-4 md:p-12 pointer-events-none select-none"
                 alt={WAIFU_GALLERY[selectedIndex].alt}
+                draggable={false}
               />
 
               <button

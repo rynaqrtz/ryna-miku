@@ -1,5 +1,8 @@
 <div align="center">
 
+<!-- Ganti src di bawah ini dengan link banner kamu -->
+<img src="https://cdn.zass.in/5jTNKGrL1C.gif" alt="Ryna Portfolio Banner" width="100%" />
+
 # 🌸 Ryna Portfolio
 
 **A premium Japanese-inspired minimalist portfolio for a Backend Developer**
@@ -10,40 +13,66 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-11-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion)
 
+**🔗 [about-ryna.my.id](https://about-ryna.my.id/)**
+
 </div>
 
 ---
 
 ## ✨ Features
 
+### Inti
 - 🌗 **Dark mode** — toggle di navbar, tersimpan otomatis, auto-detect preferensi sistem, tanpa flash saat reload
-- ⌘ **Command palette** — tekan `Cmd/Ctrl+K`, cari & lompat ke section atau jalankan aksi (ganti tema, mute suara)
+- 🎬 **Page transition** — reveal halaman pakai circle wipe (clip-path) dari atas navbar, bukan sekadar fade
+- ⌘ **Command palette** — tekan `Cmd/Ctrl+K`, cari & lompat ke section atau jalankan aksi (ganti tema, mute musik, salin email, buka GitHub, scroll ke atas)
+- 🧭 **Navbar active indicator** — dot penanda pindah ke section yang lagi dilihat, dihitung dari posisi scroll aktual (bukan `IntersectionObserver` band sempit) — akurat juga di mobile
+- 🔀 **View transitions** — perpindahan antar section & ripple ganti tema pakai native View Transition API browser (progressive enhancement)
+
+### Musik & Suara
+- 🎵 **Background music** — auto-play (menghormati kebijakan browser, fallback ke gesture pertama), loop, tersimpan status mute-nya
+- 📊 **Music visualizer** — bar equalizer kecil di tombol suara, animasi cuma jalan saat musik benar-benar diputar
+- 🏷️ **Now Playing badge** — muncul di navbar (desktop) saat musik sedang diputar
+
+### Kucing & Easter Egg
+- 🐱 **Custom cat cursor** — spring physics presisi (gak delay/nge-lag), warna otomatis ikut tema, plus trail 2 titik di belakangnya
+- 🐾 **Roaming cat decoration** — kucing kecil jalan lewat di bagian bawah layar secara berkala
 - 🕹️ **Konami code easter egg** — coba tekan ↑ ↑ ↓ ↓ ← → ← → B A
-- ⌨️ **Typing sound effect** — suara "tik" halus mengikuti animasi scramble nama di Hero (disintesis langsung via Web Audio API, tanpa file audio eksternal)
-- 🔊 **Sound toggle** — mute/unmute suara secara global, tersimpan otomatis
-- 🔀 **View transitions** — perpindahan antar section pakai native View Transition API browser (progressive enhancement)
-- 🐙 **GitHub stats live** — total repo, total stars, followers, repo terpopuler, repo terbaru — diambil langsung dari GitHub REST API
-- 🐱 **Custom cat cursor** — ngikutin mouse dengan spring physics, kuping goyang & mata "kedip" pas klik
-- 🌀 **Orbit tech stack** — icon skill berputar 2 ring berlawanan arah mengelilingi pusat, icon tetap tegak
+- 🐈 **Cat rain easter egg** — ketik `meow` di keyboard, kucing berjatuhan dari atas layar
+- 🌙 **Idle screensaver** — 45 detik gak ada aktivitas, slideshow foto waifu otomatis muncul (nonaktif di HP)
+
+### Visual & Dekorasi
+- 🌌 **Shooting stars** — bintang jatuh muncul random di background
+- 🌸 **Seasonal decoration** — kelopak sakura berjatuhan di bulan Maret–April, salju di bulan Desember (otomatis sesuai bulan sistem)
+- 🌀 **Orbit tech stack** — 20 skill (termasuk Next.js, Hono, Elysia, Deno, Rust) di 3 ring berputar berlawanan arah, warna icon otomatis kontras di light & dark mode
 - 🔤 **Text scramble effect** — nama di Hero muncul dengan animasi karakter acak → settle
+- ⌨️ **Typewriter role** — subtitle di Hero bergantian: Backend Developer / Cat Lover / Anime Lover / Otaku
+- 💬 **Hero quote** — tagline personal di bawah nama
 - 📊 **Scroll progress bar** — garis tipis di atas halaman nunjukin progres scroll
-- 🔢 **Animated stats counter** — umur, tahun ngoding, total project count-up saat masuk viewport
-- 🧭 **Navbar active indicator** — dot penanda otomatis pindah ke section yang lagi dilihat
-- 🖼️ **Lightbox gallery dengan navigasi** — panah prev/next + keyboard arrow key + counter posisi
+- 🔢 **Animated stats counter** — umur, tahun ngoding, total project, anime ditonton, baris kode ditulis — count-up saat masuk viewport
+- 🖼️ **Adaptive gallery grid** — layout foto waifu otomatis menyesuaikan jumlah foto (bukan array posisi hardcode)
+- 👆 **Swipe gesture lightbox** — geser kiri/kanan di HP buat ganti foto, plus panah & keyboard arrow key di desktop
 - 💀 **Skeleton loading** — shimmer placeholder untuk semua gambar sebelum ke-load penuh
 - 📋 **Copy-to-clipboard email** — klik "Salin" di kontak card, muncul toast konfirmasi
 - 📈 **Animated rating bar** — skor anime muncul sebagai progress bar yang mengisi saat scroll
+- 🎥 **Trailer video** — video trailer anime favorit, muted-autoplay-safe dengan native controls
 - ⬆️ **Scroll to top button** — muncul otomatis setelah scroll jauh
+- 🕐 **Live clock** — jam real-time zona Karawang (WIB) di footer
+- 📌 **"Sekarang Lagi" section** — nunjukin apa yang lagi dipelajari saat ini
+
+### Reliabilitas & Performa
+- 🛡️ **Error boundary per section** — satu section crash gak bikin seluruh halaman putih
+- ⚡ **Lazy loading + code splitting** — section berat (`TechOrbit`, `WaifuGallery`, `GithubStats`, dll) di-load on-demand
+- 💾 **GitHub stats dengan cache** — data terakhir tersimpan di localStorage, tetap tampil walau kena rate limit API
+- 📱 PWA-ready — bisa di-"Add to Home Screen" lewat `manifest.json`
+- 🌐 OG tags, Twitter card, JSON-LD structured data, `robots.txt`, `sitemap.xml`, dan custom `404.html`
+- ♿ **Menghormati `prefers-reduced-motion`** — semua animasi Framer Motion otomatis nonaktif via `MotionConfig`
 - 🎌 Japanese-inspired minimalist aesthetic
-- ⚡ Buttery smooth page transitions & scroll animations via Framer Motion
-- 📱 Fully responsive — mobile first (cat cursor & command palette otomatis nonaktif di touch device)
-- 🌀 Animated loading screen with progress bar
-- 🌐 OG tags, Twitter card, & JSON-LD structured data untuk SEO
+- 📱 Fully responsive — mobile first (cat cursor & idle screensaver otomatis nonaktif di touch device)
 - 🧹 100% comment-free production code
 
 ---
 
-## ⌨️ Keyboard Shortcuts
+## ⌨️ Keyboard Shortcuts & Rahasia
 
 | Shortcut | Aksi |
 |----------|------|
@@ -51,8 +80,10 @@
 | `↑` `↓` | Navigasi command palette |
 | `Enter` | Pilih command |
 | `Esc` | Tutup command palette / lightbox |
-| `←` `→` | Navigasi foto di lightbox gallery |
-| `↑↑↓↓←→←→BA` | 🕹️ Rahasia (coba sendiri) |
+| `←` `→` | Navigasi foto di lightbox gallery (atau swipe di HP) |
+| `↑↑↓↓←→←→BA` | 🕹️ Rahasia klasik (poster muncul) |
+| ketik `meow` | 🐈 Hujan kucing |
+| diam 45 detik | 🌙 Screensaver slideshow waifu |
 
 ---
 
@@ -60,40 +91,58 @@
 
 ```
 RynaStyle/
-├── 📄 index.html              # Entry HTML + meta tags + OG tags + JSON-LD + dark mode config
-├── 📄 index.tsx               # React root mount
-├── 📄 App.tsx                 # Root component + navbar + layout + providers
+├── 📄 index.html              # Entry HTML + meta tags + OG tags + JSON-LD + manifest link
+├── 📄 index.tsx               # React root mount + import styles.css
+├── 📄 App.tsx                 # Root component + navbar + layout + providers + page transition
+├── 📄 styles.css              # Tailwind entry + custom CSS (grain, cursor, view-transition ripple)
 ├── 📄 constants.ts            # ⭐ SEMUA DATA PERSONAL DI SINI
 ├── 📄 types.ts                # TypeScript interfaces
 ├── 📄 metadata.json           # App metadata
 │
+├── 📁 public/
+│   ├── 🤖 robots.txt
+│   ├── 🗺️  sitemap.xml
+│   ├── 📱 manifest.json       # PWA manifest
+│   └── 🚫 404.html            # Custom not-found page
+│
 ├── 📁 context/
 │   ├── 🌗 ThemeContext.tsx    # Dark mode state + localStorage persistence
-│   └── 🔊 SoundContext.tsx    # Global mute state + synthesized tick sound
+│   └── 🔊 SoundContext.tsx    # Global mute state + isPlaying + background music
 │
 ├── 📁 hooks/
-│   └── 🔢 useCountUp.ts       # Shared count-up animation hook
+│   ├── 🔢 useCountUp.ts       # Shared count-up animation hook
+│   ├── 🧭 useActiveSection.ts # Scroll-based active nav section (akurat di mobile)
+│   ├── ⌨️  useTypewriter.ts    # Cycling typed text hook
+│   └── 💤 useIdle.ts          # Idle/inactivity detection hook
 │
 └── 📁 components/
-    ├── 🎬 Loader.tsx          # Loading screen with progress bar
-    ├── 🌿 Background.tsx      # Subtle background decoration
-    ├── 🐱 CatCursor.tsx       # Custom cat-shaped cursor
+    ├── 🎬 Loader.tsx          # Loading screen with progress bar (dark mode aware)
+    ├── 🌿 Background.tsx      # Background decoration wrapper
+    ├── 🌌 ShootingStars.tsx   # Random shooting star animation
+    ├── 🌸 SeasonalDecor.tsx   # Sakura petal / snow berdasarkan bulan
+    ├── 🐈 CatDecor.tsx        # Kucing kecil jalan lewat berkala
+    ├── 🐱 CatCursor.tsx       # Custom cat-shaped cursor + trail, theme-aware
+    ├── 🐈‍⬛ CatRainEasterEgg.tsx # Easter egg ketik "meow"
+    ├── 🌙 IdleScreensaver.tsx # Screensaver slideshow saat idle
     ├── 📊 ScrollProgress.tsx  # Top scroll progress bar
     ├── ⬆️  ScrollToTop.tsx     # Floating back-to-top button
-    ├── 🌗 ThemeToggle.tsx     # Dark/light mode switch button
-    ├── 🔊 SoundToggle.tsx     # Mute/unmute button
+    ├── 🌗 ThemeToggle.tsx     # Dark/light mode switch + view-transition ripple
+    ├── 🔊 SoundToggle.tsx     # Mute/unmute button + music visualizer bars
+    ├── 🏷️  NowPlaying.tsx      # Navbar badge nama lagu yang diputar
     ├── ⌘ CommandPalette.tsx   # Cmd+K quick navigation & actions
     ├── 🕹️ KonamiEasterEgg.tsx # Hidden Konami code easter egg
     ├── 🖼️  ImageWithSkeleton.tsx # Reusable image loader with shimmer
-    ├── 👤 Hero.tsx            # Hero section (foto, nama scramble, lokasi)
-    ├── 🔢 StatsCounter.tsx    # Animated stat cards (umur, project, dll)
-    ├── ⚙️  TechOrbit.tsx      # Orbiting tech stack rings
+    ├── 👤 Hero.tsx            # Hero section (foto, nama scramble, typewriter role, quote)
+    ├── 🔢 StatsCounter.tsx    # Animated stat cards
+    ├── ⚙️  TechOrbit.tsx      # 3-ring orbiting tech stack, theme-aware icon color
+    ├── 📌 NowSection.tsx      # "Sekarang Lagi" — lagi belajar apa
     ├── 💜 AboutWaifu.tsx      # Waifu info card + foto
-    ├── 🖼️  WaifuGallery.tsx   # 6-foto gallery dengan lightbox + navigasi
-    ├── 🎬 AnimeSection.tsx    # Anime favorit + animated rating bar
-    ├── 🐙 GithubStats.tsx     # Live GitHub stats (repo, stars, followers)
+    ├── 🖼️  WaifuGallery.tsx   # Adaptive gallery grid + lightbox swipe
+    ├── 🎬 AnimeSection.tsx    # Anime favorit, rating bar, trailer video
+    ├── 🐙 GithubStats.tsx     # Live GitHub stats + localStorage cache fallback
     ├── 📬 ContactCard.tsx     # Kontak + social links + copy email
-    └── 🔚 Footer.tsx          # Footer + kutipan Jepang
+    ├── 🔚 Footer.tsx          # Footer + jam real-time + kutipan Jepang
+    └── 🛡️  ErrorBoundary.tsx  # Per-section error boundary
 ```
 
 ---
@@ -130,9 +179,15 @@ Buka `http://localhost:3000` di browser.
 ```tsx
 src="https://cdn.zass.in/MoqV0lNVa3.jpg"      // foto profil
 const TARGET_NAME = 'Ryna';                    // nama (efek scramble otomatis)
-<p>Backend Developer</p>                       // jabatan
 <span>SMKS TEXAR KARAWANG</span>               // sekolah
 <span>Karawang, ID</span>                      // lokasi
+```
+
+**File: `constants.ts`**
+
+```ts
+export const HERO_QUOTE = '...';               // tagline personal di bawah nama
+export const TYPING_ROLES = [...];             // role yang bergantian diketik
 ```
 
 ---
@@ -146,6 +201,8 @@ const STATS: StatItem[] = [
   { label: 'Umur', value: 15, suffix: '' },
   { label: 'Tahun Ngoding', value: 3, suffix: '+' },
   { label: 'Total Project', value: 7, suffix: '' },
+  { label: 'Anime Ditonton', value: 120, suffix: '+' },
+  { label: 'Baris Kode Ditulis', value: 50000, suffix: '+' },
   { label: 'Kopi Diminum', value: null, suffix: '', display: '∞' },
 ];
 ```
@@ -172,11 +229,11 @@ src="https://link-foto-kamu.jpg"   // logo navbar
 
 ```ts
 export const SKILLS: Skill[] = [
-  { name: 'NestJS', slug: 'nestjs', color: 'E0234E' },
+  { name: 'NestJS', slug: 'nestjs', color: 'E0234E', darkColor: 'E0234E' },
 ];
 ```
 
-> 🔍 Cek slug yang valid di [simpleicons.org](https://simpleicons.org). Skill dibagi otomatis jadi 2 ring — separuh pertama ring dalam, separuh kedua ring luar (lihat `TechOrbit.tsx`).
+> 🔍 Cek slug yang valid di [simpleicons.org](https://simpleicons.org). `color` dipakai di light mode, `darkColor` dipakai di dark mode — kalau brand color-nya hitam/nyaris-putih, kasih nilai yang beda supaya tetap kelihatan di kedua tema. Skill dibagi otomatis jadi 3 ring (lihat `TechOrbit.tsx`).
 
 ---
 
@@ -184,13 +241,14 @@ export const SKILLS: Skill[] = [
 
 **File: `components/CatCursor.tsx`**
 
-Cursor dibuat pakai SVG murni (bukan gambar), jadi warnanya bisa diganti langsung di kode:
+Warna cursor sekarang otomatis ikut tema (`catColor` / `accentColor` dihitung dari `useTheme()`), gak perlu diubah manual lagi kecuali mau ganti skema warnanya:
 
 ```tsx
-fill="#2d1f0e"   // ganti warna kucing
+const catColor = theme === 'dark' ? '#f5f0eb' : '#2d1f0e';
+const accentColor = theme === 'dark' ? '#0b0906' : '#f5f0eb';
 ```
 
-Cursor otomatis nonaktif di perangkat touch (HP/tablet).
+Cursor otomatis nonaktif di perangkat touch (HP/tablet) dan saat `prefers-reduced-motion` aktif.
 
 ---
 
@@ -206,10 +264,10 @@ export const SOCIALS: SocialLink[] = [
 ];
 ```
 
-**File: `components/ContactCard.tsx`**
+**File: `components/ContactCard.tsx`** dan **`components/CommandPalette.tsx`**
 
 ```tsx
-href="mailto:email-kamu@gmail.com"
+const EMAIL = 'email-kamu@gmail.com';
 ```
 
 ---
@@ -230,23 +288,10 @@ Ganti tahun mulai, nama, deskripsi, data card (alias, ulang tahun, tinggi, dll),
 export const WAIFU_GALLERY: WaifuImage[] = [
   { url: 'https://foto1.jpg', alt: 'Nama Waifu 1' },
   { url: 'https://foto2.jpg', alt: 'Nama Waifu 2' },
-  { url: 'https://foto3.jpg', alt: 'Nama Waifu 3' },
-  { url: 'https://foto4.jpg', alt: 'Nama Waifu 4' },
-  { url: 'https://foto5.jpg', alt: 'Nama Waifu 5' },
-  { url: 'https://foto6.jpg', alt: 'Nama Waifu 6' },
 ];
 ```
 
-Lightbox sekarang punya navigasi panah kiri/kanan + keyboard arrow key + tombol Escape untuk tutup — otomatis jalan tanpa perlu diubah apa-apa.
-
-| No | Rasio | Keterangan |
-|----|-------|-----------|
-| 1  | 9:16  | Portrait kiri baris 1 |
-| 2  | 9:16  | Portrait kanan baris 1 |
-| 3  | 16:9  | Landscape full width baris 2 |
-| 4  | 9:16  | Portrait kiri baris 3 |
-| 5  | 1:1   | Square tengah baris 3 |
-| 6  | 1:1   | Square kanan baris 3 |
+Grid layout otomatis mengikuti jumlah foto (pola berulang tiap 6 item) — tambah atau kurangi foto di array ini tanpa perlu sentuh komponen. Lightbox punya navigasi panah, keyboard arrow key, swipe gesture di HP, dan tombol Escape untuk tutup.
 
 ---
 
@@ -258,38 +303,55 @@ Lightbox sekarang punya navigasi panah kiri/kanan + keyboard arrow key + tombol 
 const RATING = 8.09;   // bar rating animasi otomatis mengikuti angka ini
 ```
 
-Ganti juga poster, judul, sinopsis, studio, dan genre di bagian bawahnya.
+Ganti juga poster, video trailer (`src` di tag `<video>`), judul, sinopsis, studio, dan genre.
 
 ---
 
-### 🔟 Ganti Footer & Kutipan Jepang
+### 🔟 Ganti "Sekarang Lagi"
+
+**File: `constants.ts`**
+
+```ts
+export const NOW_LEARNING = {
+  title: 'Go Routing & gRPC',
+  description: '...',
+};
+```
+
+---
+
+### 1️⃣1️⃣ Ganti Footer & Kutipan Jepang
 
 **File: `components/Footer.tsx`**
 
 ```tsx
-<p>&copy; 2025 - Nama Kamu</p>
+<p>&copy; 2026 - Nama Kamu</p>
 <span>竜名の道</span>
 <span>( Jalan Milik Ryna )</span>
 ```
 
+Jam di footer otomatis pakai `Intl.DateTimeFormat` timezone `Asia/Jakarta` — ganti `timeZone` di `formatter` kalau lokasi kamu beda.
+
 ---
 
-### 1️⃣1️⃣ Ganti Meta Tags, OG Image & SEO
+### 1️⃣2️⃣ Ganti Meta Tags, OG Image, Domain & SEO
 
-**File: `index.html`**
+**File: `index.html`, `public/robots.txt`, `public/sitemap.xml`, `public/manifest.json`, `public/404.html`**
+
+Semua sudah pakai domain `https://about-ryna.my.id/` — ganti field berikut kalau domain berubah:
 
 ```html
 <title>Nama Kamu — Jabatan Kamu</title>
-<meta name="description" content="Portfolio kamu..." />
+<link rel="canonical" href="https://domain-kamu.com/" />
+<meta property="og:url" content="https://domain-kamu.com/" />
 <meta property="og:image" content="https://link-poster-kamu.jpg" />
-<link rel="icon" href="https://link-foto-profil-kamu.jpg" />
 ```
 
-JSON-LD structured data (`<script type="application/ld+json">`) juga ada di `index.html` — update field `name`, `jobTitle`, `url`, dan `knowsAbout` biar Google lebih paham profil kamu.
+JSON-LD structured data (`<script type="application/ld+json">`) juga ada di `index.html` — update field `name`, `jobTitle`, `url`, dan `knowsAbout`.
 
 ---
 
-### 1️⃣2️⃣ Ganti Username GitHub (Stats Section)
+### 1️⃣3️⃣ Ganti Username GitHub (Stats Section)
 
 **File: `constants.ts`**
 
@@ -297,34 +359,29 @@ JSON-LD structured data (`<script type="application/ld+json">`) juga ada di `ind
 export const GITHUB_USERNAME = 'rynaqrtz';
 ```
 
-Ganti ini dan section GitHub Stats otomatis fetch data repo, stars, followers, dan repo terbaru dari akun kamu — tidak perlu API key karena pakai endpoint publik GitHub.
+Data di-cache di localStorage selama 30 menit sebagai fallback kalau GitHub API kena rate limit.
 
 ---
 
-### 1️⃣3️⃣ Ubah Warna Cat Cursor
-
-**File: `components/CatCursor.tsx`**
-
-```tsx
-fill="#2d1f0e"   // ganti hex warna kucing di semua path SVG
-```
-
----
-
-### 1️⃣4️⃣ Ganti Efek Suara Ketikan
+### 1️⃣4️⃣ Ganti Musik Latar
 
 **File: `context/SoundContext.tsx`**
 
-Suara "tik" dibuat murni via Web Audio API (osilator + envelope), bukan file MP3 — jadi tidak ada risiko link putus atau lisensi. Untuk ubah karakter suaranya:
+```ts
+const BGM_SRC = 'https://link-musik-kamu.mp3';
+```
+
+**File: `constants.ts`**
 
 ```ts
-oscillator.type = 'square';               // ubah ke 'sine' / 'triangle' untuk nada lebih lembut
-oscillator.frequency.value = 1100 + Math.random() * 300;  // ubah rentang nada
+export const BGM_TITLE = 'Nama Lagu Kamu';   // muncul di badge "Now Playing" navbar
 ```
+
+Musik auto-play mengikuti kebijakan browser (fallback ke gesture pertama kalau diblokir), loop otomatis, status mute tersimpan di localStorage.
 
 ---
 
-### 1️⃣5️⃣ Ganti Kombinasi Konami Code
+### 1️⃣5️⃣ Ganti Kombinasi Konami Code & Trigger Cat Rain
 
 **File: `components/KonamiEasterEgg.tsx`**
 
@@ -336,19 +393,25 @@ const KONAMI_SEQUENCE = [
 ];
 ```
 
-Ganti urutan tombol dan gambar yang muncul (`src`) sesuai selera.
+**File: `components/CatRainEasterEgg.tsx`**
+
+```ts
+const TRIGGER_WORD = 'meow';   // ganti kata pemicu hujan kucing
+```
 
 ---
 
-## 📸 Panduan Foto yang Dibutuhkan
+## 📸 Panduan Foto & Media yang Dibutuhkan
 
 | # | Kegunaan | Rasio | File |
 |---|----------|-------|------|
 | 1 | Foto profil hero + navbar + loader | 1:1 square | `Hero.tsx`, `App.tsx`, `Loader.tsx` |
 | 2 | Foto waifu section About | 4:5 portrait | `AboutWaifu.tsx` |
-| 3 | Poster anime | Bebas | `AnimeSection.tsx` |
-| 4–9 | Gallery 6 foto | Lihat tabel di atas | `constants.ts` |
-| 10 | OG image / poster medsos | 1200×630 px | `index.html` |
+| 3 | Poster anime | 2:3 portrait | `AnimeSection.tsx` |
+| 4 | Video trailer anime | 16:9 | `AnimeSection.tsx` |
+| 5–10 | Gallery foto (fleksibel jumlahnya) | Lihat `WaifuGallery.tsx` | `constants.ts` |
+| 11 | OG image / poster medsos | 1200×630 px | `index.html` |
+| 12 | Banner README | Bebas, disarankan ~1500×500 px | `README.md` |
 
 ---
 
@@ -358,9 +421,9 @@ Ganti urutan tombol dan gambar yang muncul (`src`) sesuai selera.
 |---------|---------|---------|
 | react | 18.3.1 | UI framework |
 | react-dom | 18.3.1 | DOM renderer |
-| framer-motion | 11.11.11 | Animasi, orbit, scroll effects |
+| framer-motion | 11.11.11 | Animasi, orbit, scroll effects, view transitions |
 | lucide-react | 0.454.0 | Icons |
-| tailwindcss | CDN | Styling |
+| tailwindcss | 3.x | Styling (build-time via PostCSS, bukan CDN) |
 
 ---
 
@@ -374,6 +437,7 @@ Ganti urutan tombol dan gambar yang muncul (`src`) sesuai selera.
 | 連絡 | Renraku | Kontak / Hubungi |
 | 三 | San | Tiga (nomor urut Miku) |
 | 花嫁 | Hanayome | Pengantin |
+| 今 | Ima | Sekarang |
 
 ---
 

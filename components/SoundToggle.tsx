@@ -1,9 +1,15 @@
 import React from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { motion as m } from 'framer-motion';
+import { VolumeX } from 'lucide-react';
 import { useSound } from '../context/SoundContext';
 
+const motion = m as any;
+
+const BAR_DURATIONS = [0.6, 0.9, 0.75];
+
 const SoundToggle: React.FC = () => {
-  const { isMuted, toggleMute } = useSound();
+  const { isMuted, isPlaying, toggleMute } = useSound();
+  const showVisualizer = isPlaying && !isMuted;
 
   return (
     <button
@@ -14,7 +20,16 @@ const SoundToggle: React.FC = () => {
       {isMuted ? (
         <VolumeX size={16} className="text-zinc-400 dark:text-zinc-500" />
       ) : (
-        <Volume2 size={16} className="text-zinc-900 dark:text-zinc-100" />
+        <div className="flex items-end gap-[2.5px] h-4">
+          {BAR_DURATIONS.map((duration, idx) => (
+            <motion.span
+              key={idx}
+              className="w-[2.5px] rounded-full bg-zinc-900 dark:bg-zinc-100"
+              animate={showVisualizer ? { height: ['30%', '100%', '45%', '80%', '30%'] } : { height: '30%' }}
+              transition={showVisualizer ? { repeat: Infinity, duration, ease: 'easeInOut' } : { duration: 0.2 }}
+            />
+          ))}
+        </div>
       )}
     </button>
   );

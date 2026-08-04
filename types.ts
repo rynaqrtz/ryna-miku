@@ -2,7 +2,7 @@ export interface Skill {
   name: string;
   slug: string;
   color: string;
-  iconUrl?: string;
+  darkColor: string;
 }
 
 export interface SocialLink {

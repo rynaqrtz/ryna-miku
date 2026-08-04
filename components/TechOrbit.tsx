@@ -3,6 +3,7 @@ import { motion as m } from 'framer-motion';
 import { Code2 } from 'lucide-react';
 import { SKILLS } from '../constants';
 import { Skill } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 const motion = m as any;
 
@@ -13,9 +14,10 @@ interface OrbitRingProps {
   direction: 1 | -1;
   hoveredSlug: string | null;
   onHover: (slug: string | null) => void;
+  iconColor: (skill: Skill) => string;
 }
 
-const OrbitRing: React.FC<OrbitRingProps> = ({ skills, radius, duration, direction, hoveredSlug, onHover }) => {
+const OrbitRing: React.FC<OrbitRingProps> = ({ skills, radius, duration, direction, hoveredSlug, onHover, iconColor }) => {
   return (
     <>
       <div
@@ -61,12 +63,14 @@ const OrbitRing: React.FC<OrbitRingProps> = ({ skills, radius, duration, directi
                   whileHover={{ scale: 1.25 }}
                   animate={{ scale: isHovered ? 1.25 : 1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                  className="w-11 h-11 md:w-14 md:h-14 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-center shadow-md cursor-pointer"
+                  className="w-9 h-9 md:w-12 md:h-12 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-center shadow-md cursor-pointer"
                 >
                   <img
-                    src={`https://cdn.simpleicons.org/${skill.slug}/${skill.color}`}
+                    src={`https://cdn.simpleicons.org/${skill.slug}/${iconColor(skill)}`}
                     alt={skill.name}
-                    className="w-5 h-5 md:w-7 md:h-7 object-contain"
+                    className="w-4 h-4 md:w-6 md:h-6 object-contain"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </motion.div>
                 <motion.span
@@ -87,10 +91,14 @@ const OrbitRing: React.FC<OrbitRingProps> = ({ skills, radius, duration, directi
 };
 
 const TechOrbit: React.FC = () => {
+  const { theme } = useTheme();
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
-  const half = Math.ceil(SKILLS.length / 2);
-  const innerSkills = SKILLS.slice(0, half);
-  const outerSkills = SKILLS.slice(half);
+  const iconColor = (skill: Skill) => (theme === 'dark' ? skill.darkColor : skill.color);
+
+  const third = Math.ceil(SKILLS.length / 3);
+  const innerSkills = SKILLS.slice(0, third);
+  const midSkills = SKILLS.slice(third, third * 2);
+  const outerSkills = SKILLS.slice(third * 2);
 
   return (
     <section className="py-32 px-6 overflow-hidden">
@@ -107,10 +115,11 @@ const TechOrbit: React.FC = () => {
             </span>
           </motion.div>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, rotateX: -30 }}
+            whileInView={{ opacity: 1, rotateX: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            style={{ transformPerspective: 800 }}
             className="text-6xl md:text-9xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter mb-6 leading-[0.85]"
           >
             Keahlian
@@ -118,10 +127,10 @@ const TechOrbit: React.FC = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.85, rotate: -15 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           className="relative w-full max-w-xl mx-auto aspect-square"
         >
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 bg-zinc-900 rounded-full flex items-center justify-center shadow-2xl z-10">
@@ -130,19 +139,30 @@ const TechOrbit: React.FC = () => {
 
           <OrbitRing
             skills={innerSkills}
-            radius={26}
-            duration={38}
+            radius={20}
+            duration={32}
             direction={1}
             hoveredSlug={hoveredSlug}
             onHover={setHoveredSlug}
+            iconColor={iconColor}
           />
           <OrbitRing
-            skills={outerSkills}
-            radius={46}
-            duration={55}
+            skills={midSkills}
+            radius={35}
+            duration={44}
             direction={-1}
             hoveredSlug={hoveredSlug}
             onHover={setHoveredSlug}
+            iconColor={iconColor}
+          />
+          <OrbitRing
+            skills={outerSkills}
+            radius={49}
+            duration={58}
+            direction={1}
+            hoveredSlug={hoveredSlug}
+            onHover={setHoveredSlug}
+            iconColor={iconColor}
           />
         </motion.div>
       </div>

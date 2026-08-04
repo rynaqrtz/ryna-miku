@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Clock } from 'lucide-react';
+
+const formatter = new Intl.DateTimeFormat('id-ID', {
+  timeZone: 'Asia/Jakarta',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false,
+});
 
 const Footer: React.FC = () => {
+  const [time, setTime] = useState(() => formatter.format(new Date()));
+
+  useEffect(() => {
+    const interval = setInterval(() => setTime(formatter.format(new Date())), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <footer className="py-20 px-6 border-t border-zinc-100 dark:border-zinc-800 text-center">
       <div className="container max-w-4xl mx-auto space-y-8">
@@ -12,6 +28,11 @@ const Footer: React.FC = () => {
         <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-widest">
           &copy; 2026 - Ryna
         </p>
+
+        <div className="flex items-center justify-center gap-2 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+          <Clock size={12} />
+          <span>{time} WIB — Karawang</span>
+        </div>
 
         <div className="flex flex-col items-center gap-4 pt-4">
           <div className="flex items-center gap-3 text-[10px] font-jp text-zinc-400 font-medium">

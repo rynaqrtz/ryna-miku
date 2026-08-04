@@ -30,8 +30,8 @@ const AnimeSection: React.FC = () => {
               <ImageWithSkeleton
                 src="https://cdn.zass.in/TvJ6gzhRIy.jpg"
                 alt="Quintessential Quintuplets Movie Poster"
-                containerClassName="w-full rounded-[4rem] relative z-10"
-                className="w-full rounded-[4rem] shadow-3xl border-4 border-white/10"
+                containerClassName="w-full aspect-[2/3] rounded-[4rem] relative z-10"
+                className="w-full h-full object-cover rounded-[4rem] shadow-3xl border-4 border-white/10"
               />
             </div>
           </motion.div>

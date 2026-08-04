@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 
 interface SoundContextValue {
   isMuted: boolean;
+  isPlaying: boolean;
   toggleMute: () => void;
 }
 
@@ -15,6 +16,7 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (typeof window === 'undefined') return false;
     return window.localStorage.getItem(STORAGE_KEY) === 'true';
   });
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -24,7 +26,16 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     audio.preload = 'auto';
     audioRef.current = audio;
 
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handlePause);
+
     return () => {
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handlePause);
       audio.pause();
       audio.src = '';
       audioRef.current = null;
@@ -65,7 +76,7 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const toggleMute = () => setIsMuted((prev) => !prev);
 
   return (
-    <SoundContext.Provider value={{ isMuted, toggleMute }}>
+    <SoundContext.Provider value={{ isMuted, isPlaying, toggleMute }}>
       {children}
     </SoundContext.Provider>
   );

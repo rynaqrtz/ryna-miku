@@ -1,5 +1,8 @@
 import React from 'react';
 import { motion as m, useScroll, useTransform } from 'framer-motion';
+import ShootingStars from './ShootingStars';
+import CatDecor from './CatDecor';
+import SeasonalDecor from './SeasonalDecor';
 
 const motion = m as any;
 
@@ -12,6 +15,9 @@ const Background: React.FC = () => {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-white dark:bg-[#0b0906] pointer-events-none transition-colors duration-500">
       <div className="absolute inset-0 bg-grid-main opacity-[0.25] dark:opacity-[0.08]" />
+
+      <ShootingStars />
+      <SeasonalDecor />
 
       <div className="absolute top-0 right-4 md:right-16 h-full flex flex-col justify-start pt-40 md:pt-64 font-jp opacity-[0.06] dark:opacity-[0.05] z-10">
         <motion.div style={{ y: y1 }} className="text-[12rem] md:text-[22rem] font-black leading-[0.85] flex flex-col text-zinc-900 dark:text-zinc-100">
@@ -31,6 +37,8 @@ const Background: React.FC = () => {
         <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-white dark:from-[#0b0906] via-white/40 dark:via-[#0b0906]/40 to-transparent" />
         <div className="absolute bottom-0 left-0 w-full h-96 bg-gradient-to-t from-white dark:from-[#0b0906] via-white/40 dark:via-[#0b0906]/40 to-transparent" />
       </div>
+
+      <CatDecor />
     </div>
   );
 };

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — Halaman Tidak Ditemukan | Ryna</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/jpeg" href="https://cdn.zass.in/MoqV0lNVa3.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('ryna-portfolio-theme');
+          var isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #ffffff;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+        transition: background-color 0.4s ease, color 0.4s ease;
+      }
+      html.dark body {
+        background-color: #0b0906;
+        color: #f5f0eb;
+      }
+      .cat {
+        font-size: 64px;
+        margin-bottom: 24px;
+        display: inline-block;
+        animation: bob 2.4s ease-in-out infinite;
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      h1 {
+        font-size: clamp(3rem, 10vw, 6rem);
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 0.9;
+        margin-bottom: 16px;
+      }
+      p {
+        font-size: 14px;
+        font-weight: 600;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        margin-bottom: 32px;
+      }
+      a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #18181b;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        padding: 16px 32px;
+        border-radius: 999px;
+        transition: opacity 0.3s ease;
+      }
+      html.dark a {
+        background-color: #f5f0eb;
+        color: #0b0906;
+      }
+      a:hover {
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="cat">🐾</div>
+      <h1>404</h1>
+      <p>Halaman ini menghilang seperti kucing di malam hari</p>
+      <a href="https://about-ryna.my.id/">Kembali ke Beranda</a>
+    </div>
+  </body>
+</html>

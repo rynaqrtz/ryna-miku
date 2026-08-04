@@ -9,12 +9,17 @@ import ScrollProgress from './components/ScrollProgress';
 import ScrollToTop from './components/ScrollToTop';
 import ThemeToggle from './components/ThemeToggle';
 import SoundToggle from './components/SoundToggle';
+import NowPlaying from './components/NowPlaying';
 import CommandPalette from './components/CommandPalette';
 import KonamiEasterEgg from './components/KonamiEasterEgg';
+import CatRainEasterEgg from './components/CatRainEasterEgg';
+import IdleScreensaver from './components/IdleScreensaver';
+import NowSection from './components/NowSection';
 import { ThemeProvider } from './context/ThemeContext';
 import { SoundProvider } from './context/SoundContext';
 import { motion as m, AnimatePresence, MotionConfig } from 'framer-motion';
 import { Menu, X, Command } from 'lucide-react';
+import { useActiveSection } from './hooks/useActiveSection';
 
 const TechOrbit = lazy(() => import('./components/TechOrbit'));
 const AboutWaifu = lazy(() => import('./components/AboutWaifu'));
@@ -40,7 +45,8 @@ const SectionErrorFallback: React.FC = () => (
   </div>
 );
 
-const NAV_ITEMS = ['Beranda', 'Keahlian', 'Waifu', 'Anime', 'Github', 'Kontak'];
+const NAV_ITEMS = ['Beranda', 'Keahlian', 'Sekarang', 'Waifu', 'Anime', 'Github', 'Kontak'];
+const SECTION_IDS = NAV_ITEMS.map((item) => item.toLowerCase());
 
 const navigateWithTransition = (callback: () => void) => {
   const docWithTransition = document as Document & { startViewTransition?: (cb: () => void) => void };
@@ -55,35 +61,12 @@ const AppShell: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('beranda');
+  const activeSection = useActiveSection(SECTION_IDS, !isLoading);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2500);
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (isLoading) return;
-
-    const sectionIds = NAV_ITEMS.map((item) => item.toLowerCase());
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
-    );
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [isLoading]);
 
   useEffect(() => {
     const handleShortcut = (e: KeyboardEvent) => {
@@ -115,6 +98,8 @@ const AppShell: React.FC = () => {
       <ScrollProgress />
       <CommandPalette isOpen={isPaletteOpen} onClose={() => setIsPaletteOpen(false)} />
       <KonamiEasterEgg />
+      <CatRainEasterEgg />
+      {!isLoading && <IdleScreensaver />}
 
       <AnimatePresence mode="wait">
         {isLoading ? (
@@ -122,22 +107,22 @@ const AppShell: React.FC = () => {
         ) : (
           <motion.div
             key="main-v2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+            initial={{ clipPath: 'circle(0% at 50% 0%)', opacity: 0.4 }}
+            animate={{ clipPath: 'circle(150% at 50% 0%)', opacity: 1 }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
           >
             <Background />
             <motion.main
-              initial={{ y: 60, opacity: 0 }}
+              initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="relative z-10"
             >
               <nav className="fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-[100] w-[94%] max-w-5xl">
                 <div className="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-2xl border border-zinc-100 dark:border-zinc-800 rounded-full px-5 py-3 md:px-8 md:py-5 shadow-2xl flex items-center justify-between">
                   <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     <div className="w-8 h-8 md:w-12 md:h-12 bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-xl flex items-center justify-center p-1.5 shadow-sm">
-                      <img src="https://cdn.zass.in/MoqV0lNVa3.jpg" alt="Logo" className="w-full h-full object-cover rounded-lg" />
+                      <img src="https://cdn.zass.in/MoqV0lNVa3.jpg" alt="Logo" className="w-full h-full object-cover rounded-lg" width={48} height={48} decoding="async" />
                     </div>
                     <div className="flex flex-col">
                       <span className="font-black text-zinc-900 dark:text-zinc-100 tracking-tighter text-[11px] md:text-sm uppercase leading-none">Ryna</span>
@@ -145,7 +130,7 @@ const AppShell: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="hidden md:flex items-center gap-8 text-[9px] font-black uppercase tracking-[0.35em] text-zinc-400">
+                  <div className="hidden lg:flex items-center gap-6 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">
                     {NAV_ITEMS.map((item) => {
                       const id = item.toLowerCase();
                       const isActive = activeSection === id;
@@ -170,6 +155,7 @@ const AppShell: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-2 md:gap-3">
+                    <NowPlaying />
                     <button
                       onClick={() => setIsPaletteOpen(true)}
                       aria-label="Buka command palette"
@@ -180,7 +166,7 @@ const AppShell: React.FC = () => {
                     </button>
                     <SoundToggle />
                     <ThemeToggle />
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2.5 bg-zinc-50 dark:bg-zinc-800 rounded-full border border-zinc-100 dark:border-zinc-700">
+                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden p-2.5 bg-zinc-50 dark:bg-zinc-800 rounded-full border border-zinc-100 dark:border-zinc-700">
                       {isMenuOpen ? <X size={18} className="text-zinc-900 dark:text-zinc-100" /> : <Menu size={18} className="text-zinc-900 dark:text-zinc-100" />}
                     </button>
                   </div>
@@ -192,7 +178,7 @@ const AppShell: React.FC = () => {
                       initial={{ opacity: 0, scale: 0.9, y: -20 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                      className="absolute top-20 left-0 right-0 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-3xl border border-zinc-100 dark:border-zinc-800 rounded-[2.5rem] p-12 shadow-2xl flex flex-col gap-8 text-center md:hidden"
+                      className="absolute top-20 left-0 right-0 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-3xl border border-zinc-100 dark:border-zinc-800 rounded-[2.5rem] p-10 shadow-2xl flex flex-col gap-6 text-center lg:hidden max-h-[70vh] overflow-y-auto"
                     >
                       {NAV_ITEMS.map((item) => {
                         const id = item.toLowerCase();
@@ -202,7 +188,7 @@ const AppShell: React.FC = () => {
                             key={item}
                             href={`#${id}`}
                             onClick={(e) => handleNavigation(e, id)}
-                            className={`text-4xl font-black tracking-tighter ${isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-300 dark:text-zinc-700'}`}
+                            className={`text-3xl md:text-4xl font-black tracking-tighter transition-colors ${isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-300 dark:text-zinc-700'}`}
                           >
                             {item}
                           </a>
@@ -226,6 +212,11 @@ const AppShell: React.FC = () => {
                   <Suspense fallback={<SectionFallback />}>
                     <TechOrbit />
                   </Suspense>
+                </ErrorBoundary>
+              </div>
+              <div id="sekarang">
+                <ErrorBoundary fallback={<SectionErrorFallback />}>
+                  <NowSection />
                 </ErrorBoundary>
               </div>
               <div id="waifu">

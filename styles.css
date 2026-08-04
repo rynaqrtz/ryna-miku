@@ -70,6 +70,22 @@ html.dark .bg-grid-main {
 ::view-transition-new(root) {
   animation-duration: 0.4s;
 }
+html.theme-ripple-transition::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.theme-ripple-transition::view-transition-new(root) {
+  animation: theme-ripple-in 0.6s ease-in-out;
+  mix-blend-mode: normal;
+}
+@keyframes theme-ripple-in {
+  from {
+    clip-path: circle(0% at var(--ripple-x, 50%) var(--ripple-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--ripple-x, 50%) var(--ripple-y, 50%));
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

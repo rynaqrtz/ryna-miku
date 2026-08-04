@@ -6,6 +6,8 @@ interface ImageWithSkeletonProps {
   className?: string;
   containerClassName?: string;
   loading?: 'lazy' | 'eager';
+  width?: number;
+  height?: number;
 }
 
 const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
@@ -14,6 +16,8 @@ const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
   className = '',
   containerClassName = '',
   loading = 'lazy',
+  width,
+  height,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -26,6 +30,10 @@ const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
         src={src}
         alt={alt}
         loading={loading}
+        decoding="async"
+        fetchPriority={loading === 'eager' ? 'high' : 'auto'}
+        width={width}
+        height={height}
         onLoad={() => setIsLoaded(true)}
         className={`${className} transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
       />

@@ -1,10 +1,30 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion as m, AnimatePresence } from 'framer-motion';
-import { Search, Home, Wrench, Heart, Clapperboard, Github, Mail, Sun, Moon, Volume2, VolumeX, CornerDownLeft } from 'lucide-react';
+import {
+  Search,
+  Home,
+  Wrench,
+  Heart,
+  Clapperboard,
+  Github,
+  Mail,
+  Sun,
+  Moon,
+  Volume2,
+  VolumeX,
+  CornerDownLeft,
+  Sparkle,
+  Copy,
+  ArrowUp,
+  ExternalLink,
+} from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useSound } from '../context/SoundContext';
+import { GITHUB_USERNAME } from '../constants';
 
 const motion = m as any;
+
+const EMAIL = 'rynaqrtzdev@gmail.com';
 
 interface CommandItem {
   id: string;
@@ -35,9 +55,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
     () => [
       { id: 'beranda', label: 'Beranda', group: 'Navigasi', icon: <Home size={16} />, action: () => scrollToSection('beranda') },
       { id: 'keahlian', label: 'Keahlian', group: 'Navigasi', icon: <Wrench size={16} />, action: () => scrollToSection('keahlian') },
+      { id: 'sekarang', label: 'Sekarang Lagi', group: 'Navigasi', icon: <Sparkle size={16} />, action: () => scrollToSection('sekarang') },
       { id: 'waifu', label: 'Waifu', group: 'Navigasi', icon: <Heart size={16} />, action: () => scrollToSection('waifu') },
       { id: 'anime', label: 'Anime', group: 'Navigasi', icon: <Clapperboard size={16} />, action: () => scrollToSection('anime') },
-      { id: 'github', label: 'GitHub Stats', group: 'Navigasi', icon: <Github size={16} />, action: () => scrollToSection('github') },
+      { id: 'github-nav', label: 'GitHub Stats', group: 'Navigasi', icon: <Github size={16} />, action: () => scrollToSection('github') },
       { id: 'kontak', label: 'Kontak', group: 'Navigasi', icon: <Mail size={16} />, action: () => scrollToSection('kontak') },
       {
         id: 'theme',
@@ -48,10 +69,33 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
       },
       {
         id: 'sound',
-        label: isMuted ? 'Aktifkan Suara' : 'Matikan Suara',
+        label: isMuted ? 'Putar Musik' : 'Hentikan Musik',
         group: 'Aksi',
         icon: isMuted ? <Volume2 size={16} /> : <VolumeX size={16} />,
         action: toggleMute,
+      },
+      {
+        id: 'scroll-top',
+        label: 'Kembali ke Atas',
+        group: 'Aksi',
+        icon: <ArrowUp size={16} />,
+        action: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      },
+      {
+        id: 'copy-email',
+        label: 'Salin Email',
+        group: 'Aksi',
+        icon: <Copy size={16} />,
+        action: () => {
+          navigator.clipboard.writeText(EMAIL).catch(() => {});
+        },
+      },
+      {
+        id: 'open-github',
+        label: 'Buka GitHub Profile',
+        group: 'Aksi',
+        icon: <ExternalLink size={16} />,
+        action: () => window.open(`https://github.com/${GITHUB_USERNAME}`, '_blank', 'noopener,noreferrer'),
       },
     ],
     [theme, isMuted, toggleTheme, toggleMute]

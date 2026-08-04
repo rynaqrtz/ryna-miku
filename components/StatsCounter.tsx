@@ -15,6 +15,8 @@ const STATS: StatItem[] = [
   { label: 'Umur', value: 15, suffix: '' },
   { label: 'Tahun Ngoding', value: 3, suffix: '+' },
   { label: 'Total Project', value: 7, suffix: '' },
+  { label: 'Anime Ditonton', value: 120, suffix: '+' },
+  { label: 'Baris Kode Ditulis', value: 50000, suffix: '+' },
   { label: 'Kopi Diminum', value: null, suffix: '', display: '∞' },
 ];
 
@@ -45,7 +47,7 @@ const StatsCounter: React.FC = () => {
 
   return (
     <section ref={ref} className="px-6 pb-24">
-      <div className="container max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      <div className="container max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
         {STATS.map((stat, idx) => (
           <StatCard key={stat.label} stat={stat} index={idx} isActive={isInView} />
         ))}

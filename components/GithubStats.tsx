@@ -27,6 +27,27 @@ interface GithubData {
   latestRepo: GithubRepo | null;
 }
 
+const CACHE_KEY = `github-stats-cache-${GITHUB_USERNAME}`;
+const CACHE_TTL = 1000 * 60 * 30;
+
+const readCache = (): GithubData | null => {
+  try {
+    const raw = window.localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { data: GithubData; cachedAt: number };
+    if (Date.now() - parsed.cachedAt > CACHE_TTL) return null;
+    return parsed.data;
+  } catch {
+    return null;
+  }
+};
+
+const writeCache = (data: GithubData) => {
+  try {
+    window.localStorage.setItem(CACHE_KEY, JSON.stringify({ data, cachedAt: Date.now() }));
+  } catch {}
+};
+
 const formatRelativeTime = (dateString: string): string => {
   const diffMs = Date.now() - new Date(dateString).getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
@@ -61,8 +82,9 @@ const StatBox: React.FC<{ icon: React.ReactNode; label: string; value: number; i
 };
 
 const GithubStats: React.FC = () => {
-  const [data, setData] = useState<GithubData | null>(null);
-  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [data, setData] = useState<GithubData | null>(() => readCache());
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>(() => (readCache() ? 'ready' : 'loading'));
+  const [isStale, setIsStale] = useState(false);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
@@ -85,10 +107,19 @@ const GithubStats: React.FC = () => {
           : null;
         const latestRepo = repos.length ? repos[0] : null;
 
-        setData({ user, totalStars, topRepo, latestRepo });
+        const freshData: GithubData = { user, totalStars, topRepo, latestRepo };
+        setData(freshData);
         setStatus('ready');
+        setIsStale(false);
+        writeCache(freshData);
       } catch {
-        setStatus('error');
+        setStatus((prev) => {
+          if (prev === 'ready') {
+            setIsStale(true);
+            return 'ready';
+          }
+          return 'error';
+        });
       }
     };
 
@@ -110,8 +141,8 @@ const GithubStats: React.FC = () => {
             </span>
           </motion.div>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="text-6xl md:text-9xl font-black text-zinc-900 dark:text-zinc-100 tracking-tighter mb-4 leading-[0.85]"
@@ -126,6 +157,11 @@ const GithubStats: React.FC = () => {
           >
             <Github size={16} /> @{GITHUB_USERNAME}
           </a>
+          {isStale && (
+            <span className="mt-3 text-[9px] font-bold uppercase tracking-widest text-zinc-300 dark:text-zinc-600">
+              Menampilkan data tersimpan sebelumnya
+            </span>
+          )}
         </div>
 
         {status === 'loading' && (
