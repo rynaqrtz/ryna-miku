@@ -1,7 +1,4 @@
 import React, { useMemo } from 'react';
-import { motion as m } from 'framer-motion';
-
-const motion = m as any;
 
 type Season = 'sakura' | 'snow' | null;
 
@@ -19,6 +16,7 @@ interface Particle {
   duration: number;
   delay: number;
   drift: number;
+  opacity: number;
 }
 
 const PARTICLE_COUNT = 18;
@@ -34,6 +32,7 @@ const SeasonalDecor: React.FC = () => {
       duration: 10 + Math.random() * 10,
       delay: Math.random() * 14,
       drift: (Math.random() - 0.5) * 120,
+      opacity: season === 'sakura' ? 0.5 : 0.65,
     }));
   }, [season]);
 
@@ -42,31 +41,24 @@ const SeasonalDecor: React.FC = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {particles.map((particle) => (
-        <motion.span
+        <span
           key={particle.id}
-          initial={{ y: '-10vh', x: 0, opacity: 0, rotate: 0 }}
-          animate={{
-            y: '110vh',
-            x: particle.drift,
-            opacity: [0, 0.7, 0.7, 0],
-            rotate: 360,
-          }}
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
           className={
             season === 'sakura'
-              ? 'absolute rounded-tl-full rounded-tr-sm rounded-bl-sm rounded-br-full bg-pink-300/50 dark:bg-pink-200/30'
-              : 'absolute rounded-full bg-white/70 dark:bg-white/40'
+              ? 'absolute rounded-tl-full rounded-tr-sm rounded-bl-sm rounded-br-full bg-pink-300 dark:bg-pink-200 will-change-transform fall-particle'
+              : 'absolute rounded-full bg-white will-change-transform fall-particle'
           }
-          style={{
-            left: `${particle.left}%`,
-            width: particle.size,
-            height: particle.size,
-          }}
+          style={
+            {
+              left: `${particle.left}%`,
+              width: particle.size,
+              height: particle.size,
+              animationDuration: `${particle.duration}s`,
+              animationDelay: `${particle.delay}s`,
+              '--particle-drift': `${particle.drift}px`,
+              '--particle-opacity': particle.opacity,
+            } as React.CSSProperties
+          }
         />
       ))}
     </div>

@@ -19,10 +19,6 @@ const IdleScreensaver: React.FC = () => {
     return () => clearInterval(interval);
   }, [isIdle]);
 
-  if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
-    return null;
-  }
-
   return (
     <AnimatePresence>
       {isIdle && (
@@ -47,7 +43,7 @@ const IdleScreensaver: React.FC = () => {
           </AnimatePresence>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40" />
           <p className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] font-black uppercase tracking-[0.6em] text-white/50">
-            Gerakkan mouse untuk lanjut
+            Sentuh atau gerakkan untuk lanjut
           </p>
         </motion.div>
       )}

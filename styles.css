@@ -86,6 +86,53 @@ html.theme-ripple-transition::view-transition-new(root) {
     clip-path: circle(150% at var(--ripple-x, 50%) var(--ripple-y, 50%));
   }
 }
+@keyframes orbit-spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes orbit-spin-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.orbit-spin-cw {
+  animation-name: orbit-spin-cw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.orbit-spin-ccw {
+  animation-name: orbit-spin-ccw;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes fall-particle {
+  from {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--particle-opacity, 0.7);
+  }
+  90% {
+    opacity: var(--particle-opacity, 0.7);
+  }
+  to {
+    transform: translate3d(var(--particle-drift, 0px), 110vh, 0) rotate(360deg);
+    opacity: 0;
+  }
+}
+.fall-particle {
+  animation-name: fall-particle;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

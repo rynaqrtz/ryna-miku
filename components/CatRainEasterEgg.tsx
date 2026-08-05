@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion as m, AnimatePresence } from 'framer-motion';
 import { Cat } from 'lucide-react';
+import { CAT_RAIN_TRIGGER_EVENT } from '../constants';
 
 const motion = m as any;
 
@@ -31,7 +32,7 @@ const CatRainEasterEgg: React.FC = () => {
   }, [isActive]);
 
   useEffect(() => {
-    console.log('%cPsst... coba ketik "meow" 🐱', 'font-weight:bold;font-size:13px;color:#8B6914;');
+    console.log('%cPsst... coba ketik "meow" 🐱 (atau ketuk logo 5x di HP)', 'font-weight:bold;font-size:13px;color:#8B6914;');
 
     let buffer = '';
     const handleKey = (e: KeyboardEvent) => {
@@ -43,8 +44,14 @@ const CatRainEasterEgg: React.FC = () => {
       }
     };
 
+    const handleCustomTrigger = () => setIsActive(true);
+
     window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
+    window.addEventListener(CAT_RAIN_TRIGGER_EVENT, handleCustomTrigger);
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      window.removeEventListener(CAT_RAIN_TRIGGER_EVENT, handleCustomTrigger);
+    };
   }, []);
 
   useEffect(() => {

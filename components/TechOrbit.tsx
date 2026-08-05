@@ -7,6 +7,51 @@ import { useTheme } from '../context/ThemeContext';
 
 const motion = m as any;
 
+interface SkillIconProps {
+  skill: Skill;
+  color: string;
+  isHovered: boolean;
+  onHoverStart: () => void;
+  onHoverEnd: () => void;
+}
+
+const SkillIcon: React.FC<SkillIconProps> = ({ skill, color, isHovered, onHoverStart, onHoverEnd }) => {
+  const [hasError, setHasError] = useState(false);
+  const initials = skill.name.slice(0, 2).toUpperCase();
+
+  return (
+    <div className="relative" onMouseEnter={onHoverStart} onMouseLeave={onHoverEnd}>
+      <motion.div
+        whileHover={{ scale: 1.25 }}
+        animate={{ scale: isHovered ? 1.25 : 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+        className="w-9 h-9 md:w-12 md:h-12 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-center shadow-md cursor-pointer overflow-hidden"
+      >
+        {hasError ? (
+          <span className="text-[9px] md:text-[11px] font-black text-zinc-900 dark:text-zinc-100">{initials}</span>
+        ) : (
+          <img
+            src={`https://cdn.simpleicons.org/${skill.slug}/${color}`}
+            alt={skill.name}
+            className="w-4 h-4 md:w-6 md:h-6 object-contain"
+            loading="lazy"
+            decoding="async"
+            onError={() => setHasError(true)}
+          />
+        )}
+      </motion.div>
+      <motion.span
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 4 }}
+        transition={{ duration: 0.2 }}
+        className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-black uppercase tracking-widest bg-zinc-900 text-white px-3 py-1.5 rounded-full pointer-events-none"
+      >
+        {skill.name}
+      </motion.span>
+    </div>
+  );
+};
+
 interface OrbitRingProps {
   skills: Skill[];
   radius: number;
@@ -18,6 +63,9 @@ interface OrbitRingProps {
 }
 
 const OrbitRing: React.FC<OrbitRingProps> = ({ skills, radius, duration, direction, hoveredSlug, onHover, iconColor }) => {
+  const spinClass = direction === 1 ? 'orbit-spin-cw' : 'orbit-spin-ccw';
+  const counterSpinClass = direction === 1 ? 'orbit-spin-ccw' : 'orbit-spin-cw';
+
   return (
     <>
       <div
@@ -30,11 +78,7 @@ const OrbitRing: React.FC<OrbitRingProps> = ({ skills, radius, duration, directi
           transform: 'translate(-50%, -50%)',
         }}
       />
-      <motion.div
-        className="absolute inset-0"
-        animate={{ rotate: direction * 360 }}
-        transition={{ repeat: Infinity, duration, ease: 'linear' }}
-      >
+      <div className={`absolute inset-0 will-change-transform ${spinClass}`} style={{ animationDuration: `${duration}s` }}>
         {skills.map((skill, idx) => {
           const angle = (idx / skills.length) * 360;
           const rad = (angle * Math.PI) / 180;
@@ -52,40 +96,19 @@ const OrbitRing: React.FC<OrbitRingProps> = ({ skills, radius, duration, directi
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              <motion.div
-                animate={{ rotate: -direction * 360 }}
-                transition={{ repeat: Infinity, duration, ease: 'linear' }}
-                className="relative"
-                onMouseEnter={() => onHover(skill.slug)}
-                onMouseLeave={() => onHover(null)}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.25 }}
-                  animate={{ scale: isHovered ? 1.25 : 1 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                  className="w-9 h-9 md:w-12 md:h-12 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl flex items-center justify-center shadow-md cursor-pointer"
-                >
-                  <img
-                    src={`https://cdn.simpleicons.org/${skill.slug}/${iconColor(skill)}`}
-                    alt={skill.name}
-                    className="w-4 h-4 md:w-6 md:h-6 object-contain"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </motion.div>
-                <motion.span
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 4 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-black uppercase tracking-widest bg-zinc-900 text-white px-3 py-1.5 rounded-full pointer-events-none"
-                >
-                  {skill.name}
-                </motion.span>
-              </motion.div>
+              <div className={`will-change-transform ${counterSpinClass}`} style={{ animationDuration: `${duration}s` }}>
+                <SkillIcon
+                  skill={skill}
+                  color={iconColor(skill)}
+                  isHovered={isHovered}
+                  onHoverStart={() => onHover(skill.slug)}
+                  onHoverEnd={() => onHover(null)}
+                />
+              </div>
             </div>
           );
         })}
-      </motion.div>
+      </div>
     </>
   );
 };

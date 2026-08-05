@@ -3,6 +3,7 @@ import { motion as m, useMotionValue, useSpring } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
 const motion = m as any;
+const TOUCH_HIDE_DELAY = 500;
 
 const CatCursor: React.FC = () => {
   const { theme } = useTheme();
@@ -27,7 +28,44 @@ const CatCursor: React.FC = () => {
     const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setIsTouch(isTouchDevice);
-    if (isTouchDevice || prefersReducedMotion) return;
+    if (prefersReducedMotion) return;
+
+    if (isTouchDevice) {
+      let hideTimer: ReturnType<typeof setTimeout>;
+
+      const touchMoveHandler = (e: TouchEvent) => {
+        const touch = e.touches[0];
+        if (!touch) return;
+        cursorX.set(touch.clientX);
+        cursorY.set(touch.clientY);
+        setIsVisible(true);
+        clearTimeout(hideTimer);
+      };
+
+      const touchStartHandler = (e: TouchEvent) => {
+        setIsClicking(true);
+        touchMoveHandler(e);
+      };
+
+      const touchEndHandler = () => {
+        setIsClicking(false);
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => setIsVisible(false), TOUCH_HIDE_DELAY);
+      };
+
+      window.addEventListener('touchstart', touchStartHandler, { passive: true });
+      window.addEventListener('touchmove', touchMoveHandler, { passive: true });
+      window.addEventListener('touchend', touchEndHandler, { passive: true });
+      window.addEventListener('touchcancel', touchEndHandler, { passive: true });
+
+      return () => {
+        clearTimeout(hideTimer);
+        window.removeEventListener('touchstart', touchStartHandler);
+        window.removeEventListener('touchmove', touchMoveHandler);
+        window.removeEventListener('touchend', touchEndHandler);
+        window.removeEventListener('touchcancel', touchEndHandler);
+      };
+    }
 
     document.documentElement.classList.add('custom-cursor-active');
 
@@ -69,8 +107,6 @@ const CatCursor: React.FC = () => {
     };
   }, [cursorX, cursorY, isVisible]);
 
-  if (isTouch) return null;
-
   const catColor = theme === 'dark' ? '#f5f0eb' : '#2d1f0e';
   const accentColor = theme === 'dark' ? '#0b0906' : '#f5f0eb';
 
@@ -79,20 +115,20 @@ const CatCursor: React.FC = () => {
       <motion.div
         className="fixed top-0 left-0 z-[9997] pointer-events-none w-1.5 h-1.5 rounded-full"
         style={{ x: trail2x, y: trail2y, translateX: '-50%', translateY: '-50%', backgroundColor: catColor }}
-        animate={{ opacity: isVisible ? 0.15 : 0 }}
+        animate={{ opacity: isVisible && !isTouch ? 0.15 : 0 }}
         transition={{ opacity: { duration: 0.3 } }}
       />
       <motion.div
         className="fixed top-0 left-0 z-[9998] pointer-events-none w-2 h-2 rounded-full"
         style={{ x: trail1x, y: trail1y, translateX: '-50%', translateY: '-50%', backgroundColor: catColor }}
-        animate={{ opacity: isVisible ? 0.3 : 0 }}
+        animate={{ opacity: isVisible && !isTouch ? 0.3 : 0 }}
         transition={{ opacity: { duration: 0.3 } }}
       />
       <motion.div
         className="fixed top-0 left-0 z-[9999] pointer-events-none"
         style={{ x, y, translateX: '-50%', translateY: '-50%' }}
-        animate={{ opacity: isVisible ? 1 : 0 }}
-        transition={{ opacity: { duration: 0.3 } }}
+        animate={{ opacity: isVisible ? (isTouch ? 0.9 : 1) : 0, scale: isTouch ? 0.85 : 1 }}
+        transition={{ opacity: { duration: 0.25 }, scale: { duration: 0.2 } }}
       >
         <motion.div
           animate={{

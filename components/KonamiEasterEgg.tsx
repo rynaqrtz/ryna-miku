@@ -10,6 +10,15 @@ const KONAMI_SEQUENCE = [
   'b', 'a',
 ];
 
+const SWIPE_SEQUENCE = ['up', 'up', 'down', 'down', 'left', 'right', 'left', 'right', 'tap', 'tap'];
+const SWIPE_THRESHOLD = 40;
+
+const classifySwipe = (dx: number, dy: number): string => {
+  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return 'tap';
+  if (Math.abs(dx) > Math.abs(dy)) return dx > 0 ? 'right' : 'left';
+  return dy > 0 ? 'down' : 'up';
+};
+
 const KonamiEasterEgg: React.FC = () => {
   const [isTriggered, setIsTriggered] = useState(false);
 
@@ -28,6 +37,38 @@ const KonamiEasterEgg: React.FC = () => {
 
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
+  }, []);
+
+  useEffect(() => {
+    let swipeBuffer: string[] = [];
+    let startX = 0;
+    let startY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      startX = touch.clientX;
+      startY = touch.clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+      const gesture = classifySwipe(touch.clientX - startX, touch.clientY - startY);
+      swipeBuffer = [...swipeBuffer, gesture].slice(-SWIPE_SEQUENCE.length);
+
+      if (swipeBuffer.length === SWIPE_SEQUENCE.length && swipeBuffer.every((g, idx) => g === SWIPE_SEQUENCE[idx])) {
+        setIsTriggered(true);
+        swipeBuffer = [];
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
   }, []);
 
   useEffect(() => {

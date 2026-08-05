@@ -10,12 +10,12 @@ export const SKILLS: Skill[] = [
   { name: 'Go', slug: 'go', color: '00ADD8', darkColor: '00ADD8' },
   { name: 'Next.js', slug: 'nextdotjs', color: '000000', darkColor: 'FFFFFF' },
   { name: 'Hono', slug: 'hono', color: 'FF5A1F', darkColor: 'FF5A1F' },
-  { name: 'Elysia', slug: 'elysia', color: '8B5CF6', darkColor: '8B5CF6' },
+  { name: 'Elysia', slug: 'elysiajs', color: '8B5CF6', darkColor: '8B5CF6' },
   { name: 'Deno', slug: 'deno', color: '000000', darkColor: 'FFFFFF' },
   { name: 'TypeScript', slug: 'typescript', color: '3178C6', darkColor: '3178C6' },
   { name: 'JavaScript', slug: 'javascript', color: 'F7DF1E', darkColor: 'F7DF1E' },
   { name: 'Python', slug: 'python', color: '3776AB', darkColor: '3776AB' },
-  { name: 'Rust', slug: 'rust', color: '000000', darkColor: 'FFFFFF' },
+  { name: 'Linux', slug: 'linux', color: '000000', darkColor: 'FFFFFF' },
   { name: 'PostgreSQL', slug: 'postgresql', color: '4169E1', darkColor: '4169E1' },
   { name: 'MySQL', slug: 'mysql', color: '4479A1', darkColor: '4479A1' },
   { name: 'MongoDB', slug: 'mongodb', color: '47A248', darkColor: '47A248' },
@@ -48,5 +48,7 @@ export const NOW_LEARNING = {
   title: 'Go Routing & gRPC',
   description: 'Lagi dalemin routing pattern di Go dan komunikasi service-to-service pakai gRPC — protobuf, streaming, sama gimana desain contract API yang bener.',
 };
+
+export const CAT_RAIN_TRIGGER_EVENT = 'cat-rain-trigger';
 
 export const TYPING_ROLES = ['Backend Developer', 'Cat Lover', 'Anime Lover', 'Otaku'];

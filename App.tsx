@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react';
 import Loader from './components/Loader';
 import Background from './components/Background';
 import Hero from './components/Hero';
@@ -10,16 +10,13 @@ import ScrollToTop from './components/ScrollToTop';
 import ThemeToggle from './components/ThemeToggle';
 import SoundToggle from './components/SoundToggle';
 import NowPlaying from './components/NowPlaying';
-import CommandPalette from './components/CommandPalette';
-import KonamiEasterEgg from './components/KonamiEasterEgg';
-import CatRainEasterEgg from './components/CatRainEasterEgg';
-import IdleScreensaver from './components/IdleScreensaver';
 import NowSection from './components/NowSection';
 import { ThemeProvider } from './context/ThemeContext';
 import { SoundProvider } from './context/SoundContext';
 import { motion as m, AnimatePresence, MotionConfig } from 'framer-motion';
 import { Menu, X, Command } from 'lucide-react';
 import { useActiveSection } from './hooks/useActiveSection';
+import { CAT_RAIN_TRIGGER_EVENT } from './constants';
 
 const TechOrbit = lazy(() => import('./components/TechOrbit'));
 const AboutWaifu = lazy(() => import('./components/AboutWaifu'));
@@ -28,6 +25,10 @@ const AnimeSection = lazy(() => import('./components/AnimeSection'));
 const GithubStats = lazy(() => import('./components/GithubStats'));
 const ContactCard = lazy(() => import('./components/ContactCard'));
 const Footer = lazy(() => import('./components/Footer'));
+const CommandPalette = lazy(() => import('./components/CommandPalette'));
+const KonamiEasterEgg = lazy(() => import('./components/KonamiEasterEgg'));
+const CatRainEasterEgg = lazy(() => import('./components/CatRainEasterEgg'));
+const IdleScreensaver = lazy(() => import('./components/IdleScreensaver'));
 
 const motion = m as any;
 
@@ -47,6 +48,8 @@ const SectionErrorFallback: React.FC = () => (
 
 const NAV_ITEMS = ['Beranda', 'Keahlian', 'Sekarang', 'Waifu', 'Anime', 'Github', 'Kontak'];
 const SECTION_IDS = NAV_ITEMS.map((item) => item.toLowerCase());
+const LOGO_TAP_COUNT = 5;
+const LOGO_TAP_WINDOW = 3000;
 
 const navigateWithTransition = (callback: () => void) => {
   const docWithTransition = document as Document & { startViewTransition?: (cb: () => void) => void };
@@ -62,6 +65,7 @@ const AppShell: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const activeSection = useActiveSection(SECTION_IDS, !isLoading);
+  const logoTapTimestamps = useRef<number[]>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2500);
@@ -90,16 +94,45 @@ const AppShell: React.FC = () => {
     setIsMenuOpen(false);
   }, []);
 
+  const handleLogoTap = useCallback(() => {
+    const now = Date.now();
+    logoTapTimestamps.current = [...logoTapTimestamps.current, now].filter((ts) => now - ts < LOGO_TAP_WINDOW);
+    if (logoTapTimestamps.current.length >= LOGO_TAP_COUNT) {
+      logoTapTimestamps.current = [];
+      window.dispatchEvent(new CustomEvent(CAT_RAIN_TRIGGER_EVENT));
+      return;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   return (
     <div className="relative antialiased selection:bg-zinc-900 selection:text-white dark:selection:bg-zinc-100 dark:selection:text-zinc-900 bg-white dark:bg-[#0b0906] overflow-x-hidden min-h-screen transition-colors duration-500">
       <ErrorBoundary>
         <CatCursor />
       </ErrorBoundary>
       <ScrollProgress />
-      <CommandPalette isOpen={isPaletteOpen} onClose={() => setIsPaletteOpen(false)} />
-      <KonamiEasterEgg />
-      <CatRainEasterEgg />
-      {!isLoading && <IdleScreensaver />}
+      <ErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <CommandPalette isOpen={isPaletteOpen} onClose={() => setIsPaletteOpen(false)} />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <KonamiEasterEgg />
+        </Suspense>
+      </ErrorBoundary>
+      <ErrorBoundary fallback={null}>
+        <Suspense fallback={null}>
+          <CatRainEasterEgg />
+        </Suspense>
+      </ErrorBoundary>
+      {!isLoading && (
+        <ErrorBoundary fallback={null}>
+          <Suspense fallback={null}>
+            <IdleScreensaver />
+          </Suspense>
+        </ErrorBoundary>
+      )}
 
       <AnimatePresence mode="wait">
         {isLoading ? (
@@ -120,15 +153,15 @@ const AppShell: React.FC = () => {
             >
               <nav className="fixed top-4 md:top-8 left-1/2 -translate-x-1/2 z-[100] w-[94%] max-w-5xl">
                 <div className="bg-white/70 dark:bg-zinc-900/70 backdrop-blur-2xl border border-zinc-100 dark:border-zinc-800 rounded-full px-5 py-3 md:px-8 md:py-5 shadow-2xl flex items-center justify-between">
-                  <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                  <button className="flex items-center gap-3" onClick={handleLogoTap} aria-label="Kembali ke atas">
                     <div className="w-8 h-8 md:w-12 md:h-12 bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-xl flex items-center justify-center p-1.5 shadow-sm">
                       <img src="https://cdn.zass.in/MoqV0lNVa3.jpg" alt="Logo" className="w-full h-full object-cover rounded-lg" width={48} height={48} decoding="async" />
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col items-start">
                       <span className="font-black text-zinc-900 dark:text-zinc-100 tracking-tighter text-[11px] md:text-sm uppercase leading-none">Ryna</span>
                       <span className="hidden md:block text-[8px] font-black text-zinc-400 uppercase tracking-widest mt-1">Backend Developer</span>
                     </div>
-                  </div>
+                  </button>
 
                   <div className="hidden lg:flex items-center gap-6 text-[9px] font-black uppercase tracking-[0.3em] text-zinc-400">
                     {NAV_ITEMS.map((item) => {
@@ -159,10 +192,10 @@ const AppShell: React.FC = () => {
                     <button
                       onClick={() => setIsPaletteOpen(true)}
                       aria-label="Buka command palette"
-                      className="hidden md:flex items-center gap-2 px-3 h-10 rounded-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 text-zinc-400"
+                      className="flex items-center justify-center md:gap-2 w-9 h-9 md:w-auto md:px-3 md:h-10 rounded-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 text-zinc-400"
                     >
                       <Command size={15} />
-                      <span className="text-[9px] font-black uppercase tracking-widest">K</span>
+                      <span className="hidden md:inline text-[9px] font-black uppercase tracking-widest">K</span>
                     </button>
                     <SoundToggle />
                     <ThemeToggle />
@@ -207,19 +240,19 @@ const AppShell: React.FC = () => {
                   <StatsCounter />
                 </ErrorBoundary>
               </div>
-              <div id="keahlian">
+              <div id="keahlian" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 900px' }}>
                 <ErrorBoundary fallback={<SectionErrorFallback />}>
                   <Suspense fallback={<SectionFallback />}>
                     <TechOrbit />
                   </Suspense>
                 </ErrorBoundary>
               </div>
-              <div id="sekarang">
+              <div id="sekarang" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}>
                 <ErrorBoundary fallback={<SectionErrorFallback />}>
                   <NowSection />
                 </ErrorBoundary>
               </div>
-              <div id="waifu">
+              <div id="waifu" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 1200px' }}>
                 <ErrorBoundary fallback={<SectionErrorFallback />}>
                   <Suspense fallback={<SectionFallback />}>
                     <AboutWaifu />
@@ -231,21 +264,21 @@ const AppShell: React.FC = () => {
                   </Suspense>
                 </ErrorBoundary>
               </div>
-              <div id="anime">
+              <div id="anime" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 900px' }}>
                 <ErrorBoundary fallback={<SectionErrorFallback />}>
                   <Suspense fallback={<SectionFallback />}>
                     <AnimeSection />
                   </Suspense>
                 </ErrorBoundary>
               </div>
-              <div id="github">
+              <div id="github" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 700px' }}>
                 <ErrorBoundary fallback={<SectionErrorFallback />}>
                   <Suspense fallback={<SectionFallback />}>
                     <GithubStats />
                   </Suspense>
                 </ErrorBoundary>
               </div>
-              <div id="kontak">
+              <div id="kontak" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 700px' }}>
                 <ErrorBoundary fallback={<SectionErrorFallback />}>
                   <Suspense fallback={<SectionFallback />}>
                     <ContactCard />
