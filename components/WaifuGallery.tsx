@@ -192,7 +192,7 @@ const GalleryItem = ({ image, index, className, onSelect }: any) => {
       <motion.div
         whileHover={{ y: -8 }}
         onClick={onSelect}
-        className="w-full h-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-[2rem] md:rounded-[3.2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 smooth-corners relative cursor-pointer"
+        className="w-full h-full bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-[2rem] md:rounded-[3.2rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 relative cursor-pointer"
       >
         <ImageWithSkeleton
           src={image.url}

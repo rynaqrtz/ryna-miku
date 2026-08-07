@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="GANTI_LINK_BANNER_DISINI" alt="Ryna Portfolio Banner" width="100%" />
+<img src="https://cdn.zass.in/5jTNKGrL1C.gif" alt="Ryna Portfolio Banner" width="100%" />
 
 # 🌸 Ryna Portfolio
 

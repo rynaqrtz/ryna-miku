@@ -41,14 +41,14 @@ html.dark .bg-grid-main {
   position: fixed;
   inset: 0;
   z-index: 100;
-  opacity: 0.04;
+  opacity: 0.5;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-image: radial-gradient(circle at 1px 1px, rgba(120, 113, 108, 0.35) 1px, transparent 0);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
 }
-.smooth-corners {
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-  mask-image: radial-gradient(white, black);
-  isolation: isolate;
+html.dark .grain {
+  background-image: radial-gradient(circle at 1px 1px, rgba(245, 240, 235, 0.25) 1px, transparent 0);
 }
 @media (pointer: fine) {
   html.custom-cursor-active * {
@@ -131,6 +131,28 @@ html.theme-ripple-transition::view-transition-new(root) {
 .fall-particle {
   animation-name: fall-particle;
   animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes firefly-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.15;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(var(--firefly-x, 40px), var(--firefly-y, -30px), 0);
+    opacity: 0.4;
+  }
+  75% {
+    opacity: 0.9;
+  }
+}
+.firefly-drift {
+  animation-name: firefly-drift;
+  animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 @media (prefers-reduced-motion: reduce) {

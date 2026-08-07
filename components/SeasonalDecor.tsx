@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 
-type Season = 'sakura' | 'snow' | null;
+type Season = 'sakura' | 'snow' | 'autumn' | null;
 
 const getSeason = (): Season => {
   const month = new Date().getMonth();
   if (month === 2 || month === 3) return 'sakura';
+  if (month === 8 || month === 9 || month === 10) return 'autumn';
   if (month === 11) return 'snow';
   return null;
 };
@@ -21,18 +22,25 @@ interface Particle {
 
 const PARTICLE_COUNT = 18;
 
+const SEASON_CLASS: Record<Exclude<Season, null>, string> = {
+  sakura: 'rounded-tl-full rounded-tr-sm rounded-bl-sm rounded-br-full bg-pink-300 dark:bg-pink-200',
+  autumn: 'rounded-tl-full rounded-tr-sm rounded-bl-sm rounded-br-full bg-orange-400 dark:bg-orange-300',
+  snow: 'rounded-full bg-white',
+};
+
 const SeasonalDecor: React.FC = () => {
   const season = getSeason();
 
   const particles = useMemo<Particle[]>(() => {
+    if (!season) return [];
     return Array.from({ length: PARTICLE_COUNT }, (_, id) => ({
       id,
       left: Math.random() * 100,
-      size: season === 'sakura' ? 8 + Math.random() * 6 : 3 + Math.random() * 4,
+      size: season === 'snow' ? 3 + Math.random() * 4 : 8 + Math.random() * 6,
       duration: 10 + Math.random() * 10,
       delay: Math.random() * 14,
       drift: (Math.random() - 0.5) * 120,
-      opacity: season === 'sakura' ? 0.5 : 0.65,
+      opacity: season === 'snow' ? 0.65 : 0.5,
     }));
   }, [season]);
 
@@ -43,11 +51,7 @@ const SeasonalDecor: React.FC = () => {
       {particles.map((particle) => (
         <span
           key={particle.id}
-          className={
-            season === 'sakura'
-              ? 'absolute rounded-tl-full rounded-tr-sm rounded-bl-sm rounded-br-full bg-pink-300 dark:bg-pink-200 will-change-transform fall-particle'
-              : 'absolute rounded-full bg-white will-change-transform fall-particle'
-          }
+          className={`absolute will-change-transform fall-particle ${SEASON_CLASS[season]}`}
           style={
             {
               left: `${particle.left}%`,

@@ -4,6 +4,7 @@ import { motion as m, useScroll, useTransform } from 'framer-motion';
 const ShootingStars = lazy(() => import('./ShootingStars'));
 const CatDecor = lazy(() => import('./CatDecor'));
 const SeasonalDecor = lazy(() => import('./SeasonalDecor'));
+const Fireflies = lazy(() => import('./Fireflies'));
 
 const motion = m as any;
 
@@ -22,6 +23,9 @@ const Background: React.FC = () => {
       </Suspense>
       <Suspense fallback={null}>
         <SeasonalDecor />
+      </Suspense>
+      <Suspense fallback={null}>
+        <Fireflies />
       </Suspense>
 
       <div className="absolute top-0 right-4 md:right-16 h-full flex flex-col justify-start pt-40 md:pt-64 font-jp opacity-[0.06] dark:opacity-[0.05] z-10">
